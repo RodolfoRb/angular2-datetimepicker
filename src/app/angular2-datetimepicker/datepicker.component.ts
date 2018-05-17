@@ -340,8 +340,8 @@ export class DatePicker implements OnInit, ControlValueAccessor {
         this.yearView = !this.yearView;
         this.monthDays = this.generateDays(this.date);
         let lastMonthDays = this.generateDays(lastMonth);
-        let first = this.monthDays[0].filter(item => item.day)[0].day;
-        let lasweek = lastMonthDays[lastMonthDays.length - 1].filter(item => item.day);
+        let first = this.monthDays[0].filter((item: any) => item.day)[0].day;
+        let lasweek = lastMonthDays[lastMonthDays.length - 1].filter((item: any) => item.day);
         let last = lasweek[lasweek.length - 1].day;
         if(!this.settings.isLast){
           this.date.setDate(first);
@@ -361,8 +361,8 @@ export class DatePicker implements OnInit, ControlValueAccessor {
             this.date.setMonth(selectedMonth);
             let monthDays = this.monthDays = this.generateDays(this.date);
             this.monthsView = !this.monthsView;
-            let first = monthDays[0].filter(item => item.day)[0].day;
-            let lasweek = monthDays[monthDays.length - 1].filter(item => item.day);
+            let first = monthDays[0].filter((item: any) => item.day)[0].day;
+            let lasweek = monthDays[monthDays.length - 1].filter((item: any) => item.day);
             let last = lasweek[lasweek.length - 1].day;
             if(!this.settings.isLast){
               this.date.setDate(first);
