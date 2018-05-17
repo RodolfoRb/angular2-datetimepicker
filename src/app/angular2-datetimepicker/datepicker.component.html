@@ -1,21 +1,21 @@
 <div class="winkel-calendar" (clickOutside)="closepopover()">
     <span *ngIf="!settings.rangepicker">
-    <input type="hidden" class="wc-input" value="{{date}}">
+    <input type="hidden" class="wc-input" value="{{timeViewDate}}">
     <div class="wc-date-container" (click)="popover = !popover">
-        <span>{{date | date: settings.format}}</span>
+        <span>{{timeViewDate | date: settings.format}}</span>
     <i class="fa fa-calendar"></i>
 </div>
 </span>
 <div *ngIf="!settings.rangepicker" class="wc-date-popover" [ngClass]="{'banner-true': settings.bigBanner == true}" [hidden]="!popover">
     <div class="wc-banner" *ngIf="settings.bigBanner">
-        <div class="wc-day-row">{{date | date: 'EEEE'}}</div>
-        <div class="wc-date-row">{{date | date: 'dd'}}</div>
+        <div class="wc-day-row">{{timeViewDate | date: 'EEEE'}}</div>
+        <div class="wc-date-row">{{timeViewDate | date: 'dd'}}</div>
         <div class="wc-my-sec">
             <div class="wc-month-row">
-                <div>{{date | date: 'MMMM'}}</div>
+                <div>{{timeViewDate | date: 'MMMM'}}</div>
             </div>
             <div class="wc-year-row">
-                <div>{{date | date: 'yyyy'}}</div>
+                <div>{{timeViewDate | date: 'yyyy'}}</div>
             </div>
         </div>
         <div class="wc-time-sec ng-scope">
@@ -61,7 +61,7 @@
         <span *ngFor="let month of settings.cal_months_labels_short" [ngClass]="{'current-month': month == settings.cal_months_labels_short[date?.getMonth()]}"
             id="{{month}}">{{month}}</span>
     </div>
-    <div class="years-view" *ngIf="yearView">
+    <div class="years-view" [hidden]="!yearView">
         <div class="fa fa-angle-left prev" (click)="generateYearList('prev')"></div>
         <div class="fa fa-angle-right next" (click)="generateYearList('next')"></div>
         <div class="years-list-view" (click)="setYear($event)">

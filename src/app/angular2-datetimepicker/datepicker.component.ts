@@ -62,7 +62,8 @@ export class DatePicker implements OnInit, ControlValueAccessor {
             'MAY', 'JUN', 'JUL', 'AUG', 'SEP',
             'OCT', 'NOV', 'DEC'],
         closeOnSelect: true,
-        rangepicker: false
+        rangepicker: false,
+        isLast: false
     }
     constructor() {
 
@@ -105,6 +106,8 @@ export class DatePicker implements OnInit, ControlValueAccessor {
         }
         else {
             this.date = new Date();
+            this.initDate(null);
+            this.monthDays = this.generateDays(this.date);
         }
     }
     registerOnChange(fn: any) {
@@ -114,7 +117,14 @@ export class DatePicker implements OnInit, ControlValueAccessor {
         this.onTouchedCallback = fn;
     }
     initDate(val: string) {
-        this.date = new Date(val);
+        if (!val) {
+          this.timeViewDate = null;
+          this.date = new Date();
+        } else {
+          this.date = new Date(val);
+          this.timeViewDate = new Date(this.date);
+        }
+
         if (this.date.getHours() <= 11) {
             this.hourValue = this.date.getHours();
             this.timeViewMeridian = "AM";
@@ -262,7 +272,7 @@ export class DatePicker implements OnInit, ControlValueAccessor {
     /***
      * (ssd > endDay -> startDay = endDay -> step = 1 ) && (sed > startDay -> 2)
      * (ssd < endDay -> startDay = ssd - step =1) && (sed < startDay -> 2 )
-     * 
+     *
      */
 
     rangeSelected: number = 0;
@@ -280,7 +290,7 @@ export class DatePicker implements OnInit, ControlValueAccessor {
             else {
                 this.date = new Date(selectedDay);
                 this.onChangeCallback(this.date.toString());
-
+                this.timeViewDate = this.date;
             }
             if (this.settings.closeOnSelect) {
                 this.popover = false;
@@ -325,16 +335,44 @@ export class DatePicker implements OnInit, ControlValueAccessor {
     setYear(evt: any) {
         console.log(evt.target);
         var selectedYear = parseInt(evt.target.getAttribute('id'));
-        this.date = new Date(this.date.setFullYear(selectedYear));
+        this.date = new Date(selectedYear, 1, 1);
+        let lastMonth = new Date(selectedYear, 11, 1);
         this.yearView = !this.yearView;
         this.monthDays = this.generateDays(this.date);
+        let lastMonthDays = this.generateDays(lastMonth);
+        let first = this.monthDays[0].filter(item => item.day)[0].day;
+        let lasweek = lastMonthDays[lastMonthDays.length - 1].filter(item => item.day);
+        let last = lasweek[lasweek.length - 1].day;
+        if(!this.settings.isLast){
+          this.date.setDate(first);
+        }else{
+          this.date = lastMonth;
+          this.date.setDate(last);
+        }
+        this.monthsView = true;
+        this.timeViewDate = this.date;
+        this.onChangeCallback(this.date.toString());
+        this.onDateSelect.emit(this.date);
     }
     setMonth(evt: any) {
         if (evt.target.getAttribute('id')) {
             var selectedMonth = this.settings.cal_months_labels_short.indexOf(evt.target.getAttribute('id'));
-            this.date = new Date(this.date.setMonth(selectedMonth));
+            this.date.setDate(1);
+            this.date.setMonth(selectedMonth);
+            let monthDays = this.monthDays = this.generateDays(this.date);
             this.monthsView = !this.monthsView;
-            this.monthDays = this.generateDays(this.date);
+            let first = monthDays[0].filter(item => item.day)[0].day;
+            let lasweek = monthDays[monthDays.length - 1].filter(item => item.day);
+            let last = lasweek[lasweek.length - 1].day;
+            if(!this.settings.isLast){
+              this.date.setDate(first);
+            }else{
+              this.date.setDate(last);
+            }
+            this.date = new Date(this.date);
+            this.timeViewDate = this.date;
+            this.onChangeCallback(this.date.toString());
+            this.onDateSelect.emit(this.date);
         }
     }
     prevMonth(e: any) {
@@ -431,7 +469,7 @@ export class DatePicker implements OnInit, ControlValueAccessor {
         var week_start = new Date(week_start_tstmp);
 
 
-        var week_end = new Date(week_start_tstmp);  // first day of week 
+        var week_end = new Date(week_start_tstmp);  // first day of week
 
         week_end = new Date(week_end.setDate(week_end.getDate() + 6));
 
