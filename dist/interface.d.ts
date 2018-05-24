@@ -10,4 +10,5 @@ export interface Settings {
     closeOnSelect?: boolean;
     rangepicker?: boolean;
     isLast?: boolean;
+    onlyMonth?: boolean;
 }

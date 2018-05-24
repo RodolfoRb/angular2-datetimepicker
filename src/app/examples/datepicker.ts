@@ -8,7 +8,7 @@ export class DatePickerExample implements OnInit {
   settings = {
     bigBanner: true,
     timePicker: false,
-    format: 'dd-MM-yyyy',
+    format: 'MM/yyyy',
     defaultOpen: true,
     closeOnSelect: false,
     rangepicker: false,

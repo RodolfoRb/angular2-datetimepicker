@@ -63,7 +63,8 @@ export class DatePicker implements OnInit, ControlValueAccessor {
             'OCT', 'NOV', 'DEC'],
         closeOnSelect: true,
         rangepicker: false,
-        isLast: false
+        isLast: false,
+        onlyMonth: true
     }
     constructor() {
 
@@ -72,6 +73,9 @@ export class DatePicker implements OnInit, ControlValueAccessor {
         this.settings = Object.assign(this.defaultSettings, this.settings);
         if (this.settings.defaultOpen) {
             this.popover = true;
+        }
+        if(this.settings.onlyMonth) {
+          this.monthsView = true;
         }
     }
     private onTouchedCallback: () => {};
@@ -360,7 +364,13 @@ export class DatePicker implements OnInit, ControlValueAccessor {
             this.date.setDate(1);
             this.date.setMonth(selectedMonth);
             let monthDays = this.monthDays = this.generateDays(this.date);
-            this.monthsView = !this.monthsView;
+            if(this.settings.onlyMonth){
+              if (this.settings.closeOnSelect) {
+                  this.popover = false;
+              }
+            }else{
+              this.monthsView = !this.monthsView;
+            }
             let first = monthDays[0].filter((item: any) => item.day)[0].day;
             let lasweek = monthDays[monthDays.length - 1].filter((item: any) => item.day);
             let last = lasweek[lasweek.length - 1].day;

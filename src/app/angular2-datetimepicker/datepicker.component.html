@@ -46,7 +46,7 @@
             <i *ngIf="yearView" class="fa fa-angle-up"></i>
         </div>
     </div>
-    <table class="calendar-header" [hidden]="yearView == true || monthsView == true">
+    <table class="calendar-header" [hidden]="yearView == true || monthsView == true || settings.onlyMonth">
         <tr>
             <td class="calendar-header-day">Su</td>
             <td class="calendar-header-day">Mo</td>
@@ -68,7 +68,7 @@
             <span *ngFor="let year of yearsList" [ngClass]="{'current-year': year == date?.getFullYear()}" id="{{year}}">{{year}}</span>
         </div>
     </div>
-    <div class="time-view" [hidden]="!timeView">
+    <div class="time-view" [hidden]="!timeView || settings.onlyMonth">
         <i class="fa fa-close time-close" (click)="timeView = false"></i>
         <div class="time">
             <div class="hour">
@@ -93,7 +93,7 @@
             <button class="button" (click)="setTimeView()">Set Time</button>
         </div>
     </div>
-    <table class="calendar-days" (click)="setDay($event);" [hidden]="monthsView || yearView">
+    <table class="calendar-days" (click)="setDay($event);" [hidden]="monthsView || yearView || settings.onlyMonth">
         <tr *ngFor="let week of monthDays">
             <td [ngClass]="{'calendar-day': day.day != null,'today': day == today.getDate() && date?.getMonth() == today.getMonth() && date?.getFullYear() == today.getFullYear(),'selected-day': day.day == date?.getDate()}"
                 *ngFor="let day of week">
